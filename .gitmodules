@@ -1,0 +1,4 @@
+[submodule "bcl"]
+	path = bcl
+	url = https://github.com/connectiblutz/bcLib.git
+	branch = main
