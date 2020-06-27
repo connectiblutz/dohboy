@@ -7,10 +7,8 @@ target_sources(dns2doh
   PRIVATE
     src/main.cc
     src/worker.cc
-    src/dnspacket.cc
   PRIVATE
     include/worker.h
-    include/dnspacket.h
     include/dnspacketdata.h
 )
 
@@ -21,4 +19,5 @@ target_include_directories(dns2doh PRIVATE
 target_link_libraries(dns2doh
   bcl
   cJSON
+  dnslib
 )
