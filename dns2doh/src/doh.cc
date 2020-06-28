@@ -22,28 +22,36 @@ void DoH::Lookup(dns::Message& message) {
   message.setRCode(3);
 
   thread_local CURL *curl = nullptr;
+
   CURLcode res;
  
   if (!curl) {
+    // one time setup per thread. these will leak on shutdown, but we're exiting everything then anyway
     curl = curl_easy_init();
-  }
-  if(curl) {
+    std::ostringstream resolvess;
+    resolvess << Settings::getDomain()<< ":443:" << Settings::getDomainIP().toString();
+    std::string resolve = resolvess.str();
+
     std::ostringstream surl;
-    surl << "https://"<<Settings::getDomain()<<"/dns-query";
+    surl << "https://" << Settings::getDomain() << "/dns-query";
     std::string url = surl.str();
+    auto hosts = curl_slist_append(nullptr, resolve.c_str());
+    curl_easy_setopt(curl, CURLOPT_RESOLVE, hosts);
+
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 
-    struct curl_slist *headers=NULL;
-    headers = curl_slist_append(headers, "Content-Type: application/dns-message");
+    auto headers = curl_slist_append(nullptr, "Content-Type: application/dns-message");
     headers = curl_slist_append(headers, "Accept: application/dns-message");
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+  }
 
+  if(curl) {
     auto response = std::make_unique<char[]>(4096);
     write_buffer response_buffer;
     response_buffer.len=0;
     response_buffer.buf=response.get();
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_buffer);
  
     auto data = std::make_unique<char[]>(4096);
@@ -54,9 +62,6 @@ void DoH::Lookup(dns::Message& message) {
  
     res = curl_easy_perform(curl);
  
-    curl_slist_free_all(headers); 
-
-    /* Check for errors */ 
     if(res != CURLE_OK) {
       bcl::LogUtil::Debug()<<"curl_easy_perform() failed: " << curl_easy_strerror(res);
     } else {
