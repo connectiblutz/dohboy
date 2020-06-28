@@ -4,6 +4,8 @@
 #include "doh.h"
 #include <bcl/socketaddress.h>
 #include <curl/curl.h>
+#include "settings.h"
+#include <bcl/pathutil.h>
 
 namespace dns2doh {
 
@@ -11,16 +13,12 @@ const uint16_t Worker::MSG_RUNSOCKET = 1;
 const uint16_t Worker::MSG_ONDNSPACKET = 2;
 
 Worker::Worker(std::string config) : _config(config) {
-  initConfig();
+  Settings::Set(bcl::PathUtil::binaryPath() / "dns2doh.conf");
   curl_global_init(CURL_GLOBAL_ALL);
   post(MSG_RUNSOCKET);
 }
 
 Worker::~Worker() {
-
-}
-
-void Worker::initConfig() {
 
 }
 
@@ -63,9 +61,8 @@ void Worker::handleDnsPacket(DnsPacketData* data) {
 }
 
 void Worker::runSocket() {
-  bool isSingleThread = (std::thread::hardware_concurrency()==1);
-  auto addr = bcl::SocketAddress("0.0.0.0",53);
-  socket = std::make_shared<bcl::UdpServerSocket>(addr);
+  bool isSingleThread = Settings::getForceSingleThread() || (std::thread::hardware_concurrency()==1);
+  socket = std::make_shared<bcl::UdpServerSocket>(Settings::getBindAddress());
   auto buffer = std::shared_ptr<char>(new char[4096], std::default_delete<char[]>());
   while (socket->isListening()) {
     bcl::SocketAddress source("",0);

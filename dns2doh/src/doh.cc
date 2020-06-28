@@ -2,6 +2,8 @@
 #include <curl/curl.h>
 #include <bcl/logutil.h>
 #include <cstring>
+#include <sstream>
+#include "settings.h"
 
 namespace dns2doh {
 
@@ -26,7 +28,10 @@ void DoH::Lookup(dns::Message& message) {
     curl = curl_easy_init();
   }
   if(curl) {
-    curl_easy_setopt(curl, CURLOPT_URL, "https://dns.quad9.net/dns-query");
+    std::ostringstream surl;
+    surl << "https://"<<Settings::getDomain()<<"/dns-query";
+    std::string url = surl.str();
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 
     struct curl_slist *headers=NULL;
     headers = curl_slist_append(headers, "Content-Type: application/dns-message");

@@ -17,7 +17,6 @@ class Worker : public bcl::MessageThreadPool {
   private:
     std::string _config;
     std::shared_ptr<bcl::UdpServerSocket> socket;
-    void initConfig();
     void runSocket();
     void handleDnsPacket(DnsPacketData* data);
     static const uint16_t MSG_RUNSOCKET;
