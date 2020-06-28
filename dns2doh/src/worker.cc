@@ -1,6 +1,8 @@
 #include "worker.h"
 #include <bcl/logutil.h>
 #include <message.h>
+#include "doh.h"
+#include <bcl/socketaddress.h>
 
 namespace dns2doh {
 
@@ -39,18 +41,23 @@ void Worker::handleDnsPacket(std::shared_ptr<DnsPacketData> data) {
   dnsPacket.decode(data->data.get(),data->size);
   if (dnsPacket.getQdCount()) {
     for (auto query : dnsPacket.getQueries()) {
-      bcl::LogUtil::Debug() << "have query for "<<query->getName()<< " from "<<data->source;
+      bcl::LogUtil::Debug() << "have query for "<<query->getName()<< " from "<<data->source.toString();
     }
+    DoH::Lookup(dnsPacket);
+    dns::uint size;
+    dnsPacket.encode(data->data.get(),4096,size);
+    socket->WritePacket(data->source,data->data.get(),size);
   }
 }
 
 void Worker::runSocket() {
-  socket = std::make_shared<bcl::UdpServerSocket>("0.0.0.0",53);
+  auto addr = bcl::SocketAddress("0.0.0.0",53);
+  socket = std::make_shared<bcl::UdpServerSocket>(addr);
   while (socket->isListening()) {
-    socket->ReadPacket([this](std::string source,std::shared_ptr<char> data, uint16_t size) {
+    socket->ReadPacket([this](const bcl::SocketAddress& source,std::shared_ptr<char> data, uint16_t size) {
       auto packetdata = std::make_shared<DnsPacketData>(source,data,size);
       post(Message(Worker::MSG_ONDNSPACKET,packetdata));
-    });
+    },4096);
   }
 }
 

@@ -7,9 +7,11 @@ target_sources(dns2doh
   PRIVATE
     src/main.cc
     src/worker.cc
+    src/doh.cc
   PRIVATE
     include/worker.h
     include/dnspacketdata.h
+    include/doh.h
 )
 
 target_include_directories(dns2doh PRIVATE
