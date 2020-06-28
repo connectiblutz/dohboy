@@ -19,10 +19,12 @@ size_t write_data(void *buffer, size_t size, size_t nmemb, write_buffer* userp)
 void DoH::Lookup(dns::Message& message) {
   message.setRCode(3);
 
-  CURL *curl;
+  thread_local CURL *curl = nullptr;
   CURLcode res;
  
-  curl = curl_easy_init();
+  if (!curl) {
+    curl = curl_easy_init();
+  }
   if(curl) {
     curl_easy_setopt(curl, CURLOPT_URL, "https://dns.quad9.net/dns-query");
 
@@ -62,9 +64,6 @@ void DoH::Lookup(dns::Message& message) {
         message.setRCode(0);
       }
     }
- 
-    /* always cleanup */ 
-    curl_easy_cleanup(curl);
   }
 }
 
