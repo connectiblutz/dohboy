@@ -28,11 +28,16 @@ void Worker::initConfig() {
 void Worker::OnMessage(Message message) {
   switch (message.code()) {
     case Worker::MSG_RUNSOCKET:
+    {
       runSocket();
       break;
+    }
     case Worker::MSG_ONDNSPACKET:
-      handleDnsPacket(message.data<DnsPacketData>());
+    {
+      auto data = message.data<DnsPacketData>();
+      handleDnsPacket(data.get());
       break;
+    }
     default:
       break;
   }
@@ -43,7 +48,7 @@ void Worker::OnStop() {
   socket->close();
 }
 
-void Worker::handleDnsPacket(std::shared_ptr<DnsPacketData> data) {
+void Worker::handleDnsPacket(DnsPacketData* data) {
   auto dnsPacket = dns::Message();
   dnsPacket.decode(data->data.get(),data->size);
   if (dnsPacket.getQdCount()) {
@@ -58,13 +63,22 @@ void Worker::handleDnsPacket(std::shared_ptr<DnsPacketData> data) {
 }
 
 void Worker::runSocket() {
+  bool isSingleThread = (std::thread::hardware_concurrency()==1);
   auto addr = bcl::SocketAddress("0.0.0.0",53);
   socket = std::make_shared<bcl::UdpServerSocket>(addr);
+  auto buffer = std::shared_ptr<char>(new char[4096], std::default_delete<char[]>());
   while (socket->isListening()) {
-    socket->ReadPacket([this](const bcl::SocketAddress& source,std::shared_ptr<char> data, uint16_t size) {
-      auto packetdata = std::make_shared<DnsPacketData>(source,data,size);
-      post(Message(Worker::MSG_ONDNSPACKET,packetdata));
-    },4096);
+    bcl::SocketAddress source("",0);
+    uint16_t bytes = socket->ReadPacket(source,buffer.get(), 4096);
+    if (bytes>0) {
+      if (isSingleThread) {
+        auto packetdata = DnsPacketData(source,buffer,bytes);
+        handleDnsPacket(&packetdata);
+      } else {
+        post(Message(Worker::MSG_ONDNSPACKET,std::make_shared<DnsPacketData>(source,buffer,bytes)));
+        buffer = std::shared_ptr<char>(new char[4096], std::default_delete<char[]>());
+      }
+    }
   }
 }
 
