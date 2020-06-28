@@ -1,6 +1,7 @@
 #include "doh.h"
 #include <curl/curl.h>
 #include <bcl/logutil.h>
+#include <cstring>
 
 namespace dns2doh {
 

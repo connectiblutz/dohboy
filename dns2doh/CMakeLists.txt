@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.13)
 
 set(CMAKE_CXX_STANDARD 17)
 
-find_package(CURL CONFIG REQUIRED)
+#find_package(CURL CONFIG REQUIRED)
 
 add_executable(dns2doh)
 target_sources(dns2doh
@@ -24,5 +24,6 @@ target_link_libraries(dns2doh
   bcl
   cJSON
   dnslib
-  CURL::libcurl
+  curl
+  # CURL::libcurl
 )
