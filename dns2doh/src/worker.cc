@@ -3,6 +3,7 @@
 #include <message.h>
 #include "doh.h"
 #include <bcl/socketaddress.h>
+#include <curl/curl.h>
 
 namespace dns2doh {
 
@@ -11,6 +12,7 @@ const uint16_t Worker::MSG_ONDNSPACKET = 2;
 
 Worker::Worker(std::string config) : _config(config) {
   initConfig();
+  curl_global_init(CURL_GLOBAL_ALL);
   post(MSG_RUNSOCKET);
 }
 
