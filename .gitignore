@@ -8,5 +8,6 @@ cmake_install.cmake
 CTestTestfile.cmake
 _deps
 _builds
+_dist
 .vscode
 bcBuild-local.conf
