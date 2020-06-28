@@ -38,6 +38,11 @@ void Worker::OnMessage(Message message) {
   }
 }
 
+void Worker::OnStop() {
+  bcl::LogUtil::Debug()<<"closing socket";
+  socket->close();
+}
+
 void Worker::handleDnsPacket(std::shared_ptr<DnsPacketData> data) {
   auto dnsPacket = dns::Message();
   dnsPacket.decode(data->data.get(),data->size);

@@ -13,6 +13,7 @@ class Worker : public bcl::MessageThreadPool {
     ~Worker();
   protected:
     virtual void OnMessage(Message message);
+    virtual void OnStop();
   private:
     std::string _config;
     std::shared_ptr<bcl::UdpServerSocket> socket;
