@@ -9,7 +9,7 @@ PLATFORM="linux"
 ARCH="arm"
 DEB_ARCH="armhf"
 BIN_PATH="/usr/share/dns2doh"
-MAINTAINER="Brian Lutz <>"
+MAINTAINER="Brian Lutz"
 DESCRIPTION="DNS to DoH proxy"
 VENDOR="Brian Lutz"
 HOMEPAGE="https://github.com/connectiblutz/dns2doh"
@@ -27,6 +27,8 @@ done
 
 
 if [ "${ARCH}" = "arm" ]; then
+  DEB_ARCH="armhf"
+elif [ "${ARCH}" = "armel" ]; then
   DEB_ARCH="armhf"
 elif [ "${ARCH}" = "arm64" ]; then
   DEB_ARCH="arm64"
