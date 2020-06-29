@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.13)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(dns2doh)
-target_sources(dns2doh
+add_executable(dohboy)
+target_sources(dohboy
   PRIVATE
     src/main.cc
     src/worker.cc
@@ -16,11 +16,11 @@ target_sources(dns2doh
     include/settings.h
 )
 
-target_include_directories(dns2doh PRIVATE
+target_include_directories(dohboy PRIVATE
   include/
 )
 
-target_link_libraries(dns2doh
+target_link_libraries(dohboy
   PRIVATE
     bcl
     cJSON
@@ -28,4 +28,4 @@ target_link_libraries(dns2doh
 )
 
 
-add_dependency(TARGET dns2doh LIB curl VCPKG_PKG CURL VCPKG_LIB CURL::libcurl)
+add_dependency(TARGET dohboy LIB curl VCPKG_PKG CURL VCPKG_LIB CURL::libcurl)

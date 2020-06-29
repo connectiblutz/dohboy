@@ -1,7 +1,7 @@
 #include "settings.h"
 #include <bcl/fileutil.h>
 
-namespace dns2doh {
+namespace dohboy {
 
 
 Settings Settings::instance;

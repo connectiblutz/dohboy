@@ -3,7 +3,7 @@
 #include <bcl/socketaddress.h>
 #include <memory>
 
-namespace dns2doh {
+namespace dohboy {
 
 struct DnsPacketData {
   DnsPacketData(const bcl::SocketAddress& source, std::shared_ptr<char> data, uint16_t size) : source(source), data(data), size(size) {}

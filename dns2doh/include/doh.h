@@ -2,7 +2,7 @@
 
 #include <message.h>
 
-namespace dns2doh {
+namespace dohboy {
 
 class DoH {
   public:

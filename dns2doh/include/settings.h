@@ -6,7 +6,7 @@
 #include <bcl/ipaddress.h>
 #include <bcl/socketaddress.h>
 
-namespace dns2doh {
+namespace dohboy {
 
 class Settings {
   public:

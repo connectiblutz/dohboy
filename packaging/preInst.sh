@@ -2,6 +2,6 @@
 
 set -eu
 
-service dns2doh stop || true
+service dohboy stop || true
 
-rm -f /etc/systemd/system/dns2doh.service
+rm -f /etc/systemd/system/dohboy.service

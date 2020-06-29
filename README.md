@@ -1,2 +1,2 @@
-# dns2doh
+# dohboy
 DNS to DoH Proxy

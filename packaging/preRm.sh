@@ -2,6 +2,6 @@
 
 set -eu
 
-service dns2doh stop || true
+service dohboy stop || true
 
-systemctl disable dns2doh
+systemctl disable dohboy

@@ -3,7 +3,7 @@ Description=DNS to DoH
 Wants=network-online.target
 After=network-online.target
 [Service]
-ExecStart=/usr/share/dns2doh/dns2doh
+ExecStart=/usr/share/dohboy/dohboy
 ExecStop=
 Restart=on-failure
 RestartSec=5

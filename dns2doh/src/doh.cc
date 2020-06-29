@@ -5,7 +5,7 @@
 #include <sstream>
 #include "settings.h"
 
-namespace dns2doh {
+namespace dohboy {
 
 struct write_buffer {
   size_t len;

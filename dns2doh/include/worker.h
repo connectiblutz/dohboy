@@ -5,7 +5,7 @@
 #include <bcl/serversocketutil.h>
 #include "dnspacketdata.h"
 
-namespace dns2doh {
+namespace dohboy {
 
 class Worker : public bcl::MessageThreadPool {
   public:
