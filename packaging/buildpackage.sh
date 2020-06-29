@@ -7,6 +7,7 @@ DIST_PATH=""
 NATIVE_OUT_PATH=""
 PLATFORM="linux"
 ARCH="arm"
+DEB_ARCH="armhf"
 BIN_PATH="/usr/share/dns2doh"
 MAINTAINER="Brian Lutz <>"
 DESCRIPTION="DNS to DoH proxy"
@@ -22,6 +23,16 @@ a) ARCH=${OPTARG};;
 p) PLATFORM=${OPTARG};;
 esac
 done
+
+
+
+if [ "${ARCH}" = "arm" ]; then
+  DEB_ARCH="armhf"
+elif [ "${ARCH}" = "arm64" ]; then
+  DEB_ARCH="arm64"
+elif [ "${ARCH}" = "x64" ]; then
+  DEB_ARCH="amd64"
+fi
 
 NATIVE_OUT_PATH="../_builds/${PLATFORM}/${ARCH}/Release/dns2doh"
 
@@ -50,8 +61,8 @@ wd=$PWD
 
 cd "${DIST_PATH}" || exit
 
-fpm -s dir -t deb -v "${BUILD_VERSION}" -a "${ARCH}" \
-  -n speedify -m "${MAINTAINER}" \
+fpm -s dir -t deb -v "${BUILD_VERSION}" -a "${DEB_ARCH}" \
+  -n dns2doh -m "${MAINTAINER}" \
   --description "${DESCRIPTION}" \
   --vendor "${VENDOR}" \
   --url "${HOMEPAGE}" \
@@ -63,5 +74,9 @@ fpm -s dir -t deb -v "${BUILD_VERSION}" -a "${ARCH}" \
   --after-upgrade ../../../packaging/postInst.sh \
   --deb-systemd ../../../packaging/${SYSTEMD_FILE} \
   .
+
+mkdir -p ../../../_out/
+rm -f ../../../_out/*_${DEB_ARCH}.deb
+mv *.deb ../../../_out/
 
 cd - || exit

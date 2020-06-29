@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.13)
-project(apfd VERSION 0.1.0 LANGUAGES CXX C)
+project(dns2doh VERSION 0.2.0 LANGUAGES CXX C)
 
 add_subdirectory(bcl)
 add_subdirectory(third_party)

@@ -10,6 +10,6 @@ RestartSec=5
 TimeoutStartSec=60
 TimeoutStopSec=5
 KillMode=process
-Type=exec
+Type=forking
 [Install]
 WantedBy=multi-user.target

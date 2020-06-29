@@ -9,5 +9,6 @@ CTestTestfile.cmake
 _deps
 _builds
 _dist
+_out
 .vscode
 bcBuild-local.conf
