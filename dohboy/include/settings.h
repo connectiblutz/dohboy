@@ -11,7 +11,7 @@ namespace dohboy {
 class Settings {
   public:
     static Settings& Get() { return instance; };
-    static void Set(std::filesystem::path file);
+    static void Set(const std::filesystem::path& file);
     static const bcl::SocketAddress& getBindAddress() { return instance.bindAddress; }
     static const std::string& getDomain() { return instance.domain; }
     static const bcl::IPAddress& getDomainIP() { return instance.domainIP; }

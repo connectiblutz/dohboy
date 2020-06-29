@@ -6,7 +6,7 @@ namespace dohboy {
 
 Settings Settings::instance;
 
-void Settings::Set(std::filesystem::path file) {
+void Settings::Set(const std::filesystem::path& file) {
   std::string configStr = bcl::FileUtil::FileToString(file);
   cJSON* configJson = cJSON_Parse(configStr.c_str());
 
