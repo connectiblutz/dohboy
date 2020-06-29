@@ -1,5 +1,7 @@
 {
   "curl": {
-    "version":null
+    "version":null,
+    "vcpkg":"curl",
+    "apt":"libcurl4-openssl-dev"
   }
 }
