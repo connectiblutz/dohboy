@@ -8,6 +8,7 @@ NATIVE_OUT_PATH=""
 PLATFORM="linux"
 ARCH="arm"
 DEB_ARCH="armhf"
+PKG_NAME_ARCH="armhf"
 BIN_PATH="/usr/share/dohboy"
 MAINTAINER="Brian Lutz"
 DESCRIPTION="DNS to DoH proxy"
@@ -28,12 +29,16 @@ done
 
 if [ "${ARCH}" = "arm" ]; then
   DEB_ARCH="armhf"
-elif [ "${ARCH}" = "armel" ]; then
+  PKG_NAME_ARCH="armhf"
+elif [ "${ARCH}" = "armv6" ]; then
   DEB_ARCH="armhf"
+  PKG_NAME_ARCH="armv6"
 elif [ "${ARCH}" = "arm64" ]; then
   DEB_ARCH="arm64"
+  PKG_NAME_ARCH="arm64"
 elif [ "${ARCH}" = "x64" ]; then
   DEB_ARCH="amd64"
+  PKG_NAME_ARCH="amd64"
 fi
 
 NATIVE_OUT_PATH="../_builds/${PLATFORM}/${ARCH}/Release/dohboy"
@@ -78,7 +83,7 @@ fpm -s dir -t deb -v "${BUILD_VERSION}" -a "${DEB_ARCH}" \
   .
 
 mkdir -p ../../../_out/
-rm -f ../../../_out/*_${DEB_ARCH}.deb
-mv *.deb ../../../_out/
+rm -f ../../../_out/*_${PKG_NAME_ARCH}.deb
+mv *.deb ../../../_out/dohboy_${BUILD_VERSION}_${PKG_NAME_ARCH}.deb
 
 cd - || exit
