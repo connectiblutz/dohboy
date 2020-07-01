@@ -9,7 +9,7 @@ namespace dohboy {
 
 class Worker : public bcl::MessageThreadPool {
   public:
-    Worker(std::string config = "");
+    Worker();
     ~Worker();
   protected:
     virtual void OnMessage(Message message);

@@ -4,6 +4,7 @@
 #include <cstring>
 #include <sstream>
 #include "settings.h"
+#include <bcl/pathutil.h>
 
 namespace dohboy {
 
@@ -45,6 +46,12 @@ void DoH::Lookup(dns::Message& message) {
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+
+    auto certPath = bcl::PathUtil::binaryPath() / "cacert.pem";
+    if (std::filesystem::exists(certPath)) {
+      auto strCertPath = certPath.string();
+      curl_easy_setopt(curl, CURLOPT_CAINFO, strCertPath.c_str());
+    }
   }
 
   if(curl) {

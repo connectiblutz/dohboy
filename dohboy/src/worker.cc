@@ -14,7 +14,7 @@ namespace dohboy {
 const uint16_t Worker::MSG_RUNSOCKET = 1;
 const uint16_t Worker::MSG_ONDNSPACKET = 2;
 
-Worker::Worker(std::string config) : _config(config) {
+Worker::Worker()  {
   Settings::Set(bcl::PathUtil::binaryPath() / "dohboy.conf");
   curl_global_init(CURL_GLOBAL_ALL);
   post(MSG_RUNSOCKET);

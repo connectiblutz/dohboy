@@ -53,7 +53,8 @@ echo "ARCH = ${ARCH}"
 
 SYSTEMD_FILE="./service/dohboy.service"
 
-declare -a CommonFiles=("./service/dohboy.conf")
+declare -a CommonFiles=("./service/dohboy.conf"
+                        "./service/cacert.pem")
 
 rm -rf "$DIST_PATH"
 mkdir -p "${DIST_PATH}${BIN_PATH}"
