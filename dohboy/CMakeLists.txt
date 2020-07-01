@@ -9,11 +9,13 @@ target_sources(dohboy
     src/worker.cc
     src/doh.cc
     src/settings.cc
+    src/local.cc
   PRIVATE
     include/worker.h
     include/dnspacketdata.h
     include/doh.h
     include/settings.h
+    include/local.h
 )
 
 target_include_directories(dohboy PRIVATE

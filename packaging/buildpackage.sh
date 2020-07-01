@@ -80,6 +80,7 @@ fpm -s dir -t deb -v "${BUILD_VERSION}" -a "${DEB_ARCH}" \
   --before-upgrade ../../../packaging/preInst.sh \
   --after-upgrade ../../../packaging/postInst.sh \
   --deb-systemd ../../../packaging/${SYSTEMD_FILE} \
+  -d libcurl4 -d openssl \
   .
 
 mkdir -p ../../../_out/

@@ -67,10 +67,10 @@ void DoH::Lookup(dns::Message& message) {
     } else {
       long response_code;
       curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
-      bcl::LogUtil::Debug()<<"doh success "<<response_code;
+      //bcl::LogUtil::Debug()<<"doh success "<<response_code;
       if (response_code==200) {
         message.decode(response_buffer.buf,response_buffer.len);
-        bcl::LogUtil::Debug()<<"doh response size "<<response_buffer.len<<" with "<<message.getAnCount()<<" answers";
+        //bcl::LogUtil::Debug()<<"doh response size "<<response_buffer.len<<" with "<<message.getAnCount()<<" answers";
         message.setRCode(0);
       }
     }

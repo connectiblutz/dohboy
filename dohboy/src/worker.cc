@@ -6,6 +6,8 @@
 #include <curl/curl.h>
 #include "settings.h"
 #include <bcl/pathutil.h>
+#include <bcl/stringutil.h>
+#include "local.h"
 
 namespace dohboy {
 
@@ -50,10 +52,11 @@ void Worker::handleDnsPacket(DnsPacketData* data) {
   auto dnsPacket = dns::Message();
   dnsPacket.decode(data->data.get(),data->size);
   if (dnsPacket.getQdCount()) {
-    for (auto query : dnsPacket.getQueries()) {
-      bcl::LogUtil::Debug() << "have query for "<<query->getName()<< " from "<<data->source.toString();
+    //bcl::LogUtil::Debug()<<"have query with "<<dnsPacket.getQdCount()<<" questions";
+    if (!Local::Lookup(dnsPacket)) {
+      DoH::Lookup(dnsPacket);
     }
-    DoH::Lookup(dnsPacket);
+    //bcl::LogUtil::Debug()<<"sending response with "<<dnsPacket.getAnCount()<<" answers";
     dns::uint size;
     dnsPacket.encode(data->data.get(),4096,size);
     socket->WritePacket(data->source,data->data.get(),size);
